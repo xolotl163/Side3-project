@@ -47,7 +47,6 @@ while running:
     # logica de cambio de estados generales del juego
     if current_game_state == game_state["game_menu"]:
         background_color = "gray"
-        
         #menu buttons
         play_button = pygame.Rect(window_width // 2 - 100, window_height // 2 - 50, 200, 50)
         exit_button = pygame.Rect(window_width // 2 - 100, window_height // 2 + 20, 200, 50)
@@ -56,12 +55,8 @@ while running:
                 if play_button.collidepoint(event.pos):
                     current_game_state = game_state["playing"]
                 elif exit_button.collidepoint(event.pos):
+                    #se debe de tomar en cuenta todo el proceso de memoria y actualización de datos importantes al cerrar el programa
                     running = False
-
-        if keys[pygame.K_1]:
-            current_game_state = game_state["playing"]
-        elif keys[pygame.K_2]:
-            current_game_state = game_state["game_over"]
 
     if current_game_state == game_state["playing"]:
         background_color = "green"
@@ -69,13 +64,23 @@ while running:
             current_game_state = game_state["game_over"]
 
     if current_game_state == game_state["game_over"]:
-        background_color = "red"
-        if keys[pygame.K_q]:
-            current_game_state = game_state["game_menu"]
+        background_color = (145,145,145)
+        #menu buttons
+        replay_button = pygame.Rect(window_width // 2 - 100, window_height // 2 - 50, 200, 50)
+        return_menu_button = pygame.Rect(window_width // 2 - 100, window_height // 2 + 20, 200, 50)
+        exit_button = pygame.Rect(window_width // 2 - 100, window_height // 2 + 100, 200, 50)
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # check for left mouse button click
+                if replay_button.collidepoint(event.pos):
+                    current_game_state = game_state["playing"]
+                elif return_menu_button.collidepoint(event.pos):
+                    current_game_state = game_state["game_menu"]
+                elif exit_button.collidepoint(event.pos):
+                    #se debe de tomar en cuenta todo el proceso de memoria y actualización de datos importantes al cerrar el programa
+                    running = False
     
 
     # RENDER YOUR GAME HERE
-    print(current_game_state)
 
     """
         nota: se tiene que separar en un archivo aparte la logica de los menus,
@@ -89,6 +94,17 @@ while running:
         pygame.draw.rect(screen, "white", play_button)
         pygame.draw.rect(screen, "white", exit_button)
         screen.blit(play_button_text, (play_button.centerx - play_button_text.get_width() // 2, play_button.centery - play_button_text.get_height() // 2))
+        screen.blit(exit_button_text, (exit_button.centerx - exit_button_text.get_width() // 2, exit_button.centery - exit_button_text.get_height() // 2))
+
+    if current_game_state == game_state["game_over"]:
+        replay_button_text = font_menu.render("Replay", True, "black")
+        return_menu_button_text = font_menu.render("Return to menu", True, "black")
+        exit_button_text = font_menu.render("Exit", True, "black")
+        pygame.draw.rect(screen, "white", replay_button)
+        pygame.draw.rect(screen, "white", return_menu_button)
+        pygame.draw.rect(screen, "white", exit_button)
+        screen.blit(replay_button_text, (replay_button.centerx - replay_button_text.get_width() // 2, replay_button.centery - replay_button_text.get_height() // 2))
+        screen.blit(return_menu_button_text, (return_menu_button.centerx - return_menu_button_text.get_width() // 2, return_menu_button.centery - return_menu_button_text.get_height() // 2))
         screen.blit(exit_button_text, (exit_button.centerx - exit_button_text.get_width() // 2, exit_button.centery - exit_button_text.get_height() // 2))
 
     # flip() the display to put your work on screen
