@@ -3,6 +3,11 @@ import pygame
 #constants
 window_width = 1920
 window_height = 1080
+screen_center = (window_width / 2, window_height / 2)
+player_movement_speed = 500
+const_limit_escenary = 25
+
+player_image = "src_code/resources/placeholders/player_placeholder.png"
 
 #general variables
 
