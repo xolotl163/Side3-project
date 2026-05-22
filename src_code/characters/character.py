@@ -3,6 +3,8 @@ import config
 import pygame
 import math
 
+import general_objects.bullet as bullet
+
 class Character:
     #appeareance is the path to the image of the character, it should be a string
     def __init__(self, x = 0.0, y = 0.0, width = 1.0, height = 1.0, appeareance = None):
@@ -95,6 +97,7 @@ class Player(Character):
 
         self.forward_vector = (math.cos(angle_rad), math.sin(angle_rad))
         angle_degrees = math.degrees(angle_rad) + 90  # add 90 degrees to make the character face the mouse cursor
+        self.rotation = angle_degrees
 
         # rotate the image
         self.appeareance = pygame.transform.rotate(self.original_appeareance, -angle_degrees)
@@ -106,3 +109,22 @@ class Player(Character):
         #the new top left position
         self.x = self.rect.x
         self.y = self.rect.y
+
+    def shoot(self, bullet_list):
+        """
+        This method creates an instance of the bullet class at the sme point of player, 
+        with the same rotation and forward vector
+        """
+        print("Player shoot")
+
+        new_bullet = bullet.Bullet(
+            config.bullet_movement_speed,
+            self.rect.center[0],
+            self.rect.center[1],
+            config.bullet_width,
+            config.bullet_height,
+            self.rotation,
+            config.bullet_image
+        )
+
+        bullet_list.append(new_bullet)

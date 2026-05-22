@@ -5,6 +5,7 @@ pygame.init()
 
 #selfmade imports
 import characters.character as character
+import general_objects.bullet as bullet
 
 # pygame setup - start
 screen = pygame.display.set_mode((config.window_width, config.window_height), pygame.FULLSCREEN)
@@ -12,7 +13,9 @@ clock = pygame.time.Clock()
 running = True
 # pygame setup - end
 
-player = character.Player(config.window_width // 2, 1050, 50, 50, config.player_image)
+#general objets and values to the excecution
+player = character.Player(config.window_width // 2, config.window_height // 2, 50, 50, config.player_image)
+bullets = []  
 
 while running:
     
@@ -40,16 +43,27 @@ while running:
         #player events
         if event.type == pygame.MOUSEMOTION:
             player.rotate(pygame.mouse.get_pos(), delta_time)  # rotate the player to look at the mouse cursor
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                player.shoot(bullets)
 
     """ Logic of the game """
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill(config.background_color)
-    
+    screen.fill(config.background_color)   
+ 
+    #for the bullets
+    for bullet in bullets:
+        bullet.reposition(bullet.direction, delta_time)
+    bullets = [b for b in bullets if b.is_active]
+
     #player logic
     player.move(keys,delta_time)  # move the player based on the keys that are currently pressed
 
     # RENDER YOUR GAME HERE -> starts
     player.draw(screen)
+    for bullet in bullets:
+        bullet.draw(screen)
+
     pygame.draw.rect(screen, "red", player.rect, 2)  # draw the player's rect for debugging purposes
     # RENDER YOUR GAME HERE -> ends
 
