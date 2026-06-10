@@ -19,13 +19,13 @@ class Bullet:
         self.mov_speed = mov_speed
         self.is_active = True #used to libberate memory during execution
 
+        """ just for debug
         print("******************************************")
         print("Direction: ", self.direction )
         print("Rotation: ", self.rotation)
         print("******************************************")
-
-        self.rotate(self.rotation)
-
+        """
+        
     #setters and getters
 
     # general methods to the class

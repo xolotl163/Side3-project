@@ -1,6 +1,6 @@
 import pygame
 
-#constants
+#constants for the "literal" windows or screen
 window_width = 1920
 window_height = 1080
 screen_center = (window_width / 2, window_height / 2)
@@ -8,13 +8,21 @@ player_movement_speed = 500
 bullet_movement_speed = 250
 const_limit_escenary = 25
 
-bullet_width = 18
-bullet_height = 34
-
+#objects and instances constants
 player_image = "src_code/resources/placeholders/player_placeholder.png"
 bullet_image = "src_code/resources/placeholders/bullet_placeholder.png"
+obstacle_image = "src_code/resources/placeholders/obstacle_placeholder.png"
+player_width = 50
+player_height = 50
+bullet_width = 16
+bullet_height = 16
+obstacle_width = 200
+obstacle_height = 75
 
-#general variables
+#in-game constants
+max_shooted_bullets = 10
+
+#in-game variables
 
 #dictionaries, lists and other data structures that are important for the game
 

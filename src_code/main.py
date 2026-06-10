@@ -6,6 +6,7 @@ pygame.init()
 #selfmade imports
 import characters.character as character
 import general_objects.bullet as bullet
+import general_objects.obstacle as obstacle
 
 # pygame setup - start
 screen = pygame.display.set_mode((config.window_width, config.window_height), pygame.FULLSCREEN)
@@ -14,8 +15,10 @@ running = True
 # pygame setup - end
 
 #general objets and values to the excecution
-player = character.Player(config.window_width // 2, config.window_height // 2, 50, 50, config.player_image)
+player = character.Player(config.window_width // 2, (config.window_height // 2)+150, config.player_width, config.player_height, config.player_image)
+obstacle = obstacle.Obstacle(config.window_width // 2, config.window_height // 2,config.obstacle_width,config.obstacle_height,config.obstacle_image)
 bullets = []  
+obstacles = [] #this list is used more than 1 obstacles are needed
 
 while running:
     
@@ -45,7 +48,10 @@ while running:
             player.rotate(pygame.mouse.get_pos(), delta_time)  # rotate the player to look at the mouse cursor
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
-                player.shoot(bullets)
+                if len(bullets) == config.max_shooted_bullets:
+                    pass
+                else: 
+                    player.shoot(bullets)
 
     """ Logic of the game """
     # fill the screen with a color to wipe away anything from last frame
@@ -60,11 +66,17 @@ while running:
     player.move(keys,delta_time)  # move the player based on the keys that are currently pressed
 
     # RENDER YOUR GAME HERE -> starts
-    player.draw(screen)
     for bullet in bullets:
         bullet.draw(screen)
+        pygame.draw.rect(screen, "blue", bullet.rect, 2)
 
-    pygame.draw.rect(screen, "red", player.rect, 2)  # draw the player's rect for debugging purposes
+    #objects draw
+    obstacle.draw(screen)
+    player.draw(screen)
+
+    #hitboxes draw
+    pygame.draw.rect(screen, "blue", player.rect, 2)  # draw the player's rect for debugging purposes
+    pygame.draw.rect(screen, "blue", obstacle.rect, 2)
     # RENDER YOUR GAME HERE -> ends
 
     # flip() the display to put your work on screen
