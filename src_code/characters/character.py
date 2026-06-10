@@ -112,15 +112,14 @@ class Player(Character):
 
     def shoot(self, bullet_list):
         """
-        This method creates an instance of the bullet class at the sme point of player, 
-        with the same rotation and forward vector
+        This method creates an instance of the bullet class at the same point of player, 
+        with the same forward vector
         """
-        print("Player shoot")
-
+        
         new_bullet = bullet.Bullet(
             config.bullet_movement_speed,
-            self.rect.center[0],
-            self.rect.center[1],
+            self.rect.center[0] - (config.bullet_width/2),
+            self.rect.center[1] - (config.bullet_height/2),
             config.bullet_width,
             config.bullet_height,
             self.rotation,
