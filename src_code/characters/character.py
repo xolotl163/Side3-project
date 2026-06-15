@@ -45,6 +45,10 @@ class Character:
 class Player(Character):
     def __init__(self, x, y, width, height, appeareance):
         super().__init__(x, y, width, height, appeareance)
+        hitbox_width = (self.width / 2)+10
+        hitbox_height = (self.height / 2)+10
+        self.hitbox = pygame.Rect(0,0,hitbox_width, hitbox_height)
+        self.hitbox.center = self.rect.center
 
     def move(self, keys, delta_time = 1.0):
         #if no delta is given, we just use the default value of 1.0
@@ -67,6 +71,7 @@ class Player(Character):
 
         self.rect.x = self.x
         self.rect.y = self.y
+        self.hitbox.center = self.rect.center
     
     #auxiliar method
     def reposition(self, x, y):
@@ -104,11 +109,15 @@ class Player(Character):
 
         #update the rect
         self.rect = self.appeareance.get_rect(center=(old_center))
+        #self.hitbox = self.appeareance.get_rect(center=(old_center))
 
         #sinc the rotation with our x,y psotion to create
         #the new top left position
         self.x = self.rect.x
         self.y = self.rect.y
+
+        #new hitbox rect is created
+        self.hitbox.center = self.rect.center
 
     def shoot(self, bullet_list):
         """
@@ -116,10 +125,13 @@ class Player(Character):
         with the same forward vector
         """
         
+        spawn_x = self.rect.center[0] + self.forward_vector[0] * (self.height / 2)
+        spawn_y = self.rect.center[1] + self.forward_vector[1] * (self.height / 2)
+
         new_bullet = bullet.Bullet(
             config.bullet_movement_speed,
-            self.rect.center[0] - (config.bullet_width/2),
-            self.rect.center[1] - (config.bullet_height/2),
+            spawn_x - (config.bullet_width/2),
+            spawn_y - (config.bullet_height/2),
             config.bullet_width,
             config.bullet_height,
             self.rotation,

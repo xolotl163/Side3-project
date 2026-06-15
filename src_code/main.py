@@ -32,7 +32,12 @@ while running:
     events = pygame.event.get()  # returns a list of all events that have occurred since the last time this function was called
     keys = pygame.key.get_pressed() # get the state of all keyboard buttons, returns a list of booleans representing each key
 
-    #global events
+    """ Logic of the game -> starts """
+    #player logic
+    player.move(keys,delta_time)  # move the player based on the keys that are currently pressed
+   # player.rotate(pygame.mouse.get_pos(), delta_time)  # rotate the player to look at the mouse cursor
+    
+      #global events
     for event in events:
         #these two events are for quitting the game, one is for when the user clicks the close button, and the other is for when the user presses the escape key
         if event.type == pygame.QUIT:  # check for the QUIT event, which happens when the user clicks the close button
@@ -48,35 +53,38 @@ while running:
             player.rotate(pygame.mouse.get_pos(), delta_time)  # rotate the player to look at the mouse cursor
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
-                if len(bullets) == config.max_shooted_bullets:
-                    pass
-                else: 
+                if len(bullets) < config.max_shooted_bullets:
                     player.shoot(bullets)
 
-    """ Logic of the game """
     # fill the screen with a color to wipe away anything from last frame
     screen.fill(config.background_color)   
- 
+
     #for the bullets
     for bullet in bullets:
         bullet.reposition(bullet.direction, delta_time)
     bullets = [b for b in bullets if b.is_active]
-
-    #player logic
-    player.move(keys,delta_time)  # move the player based on the keys that are currently pressed
+    """ logic of the game - ends """
 
     # RENDER YOUR GAME HERE -> starts
     for bullet in bullets:
         bullet.draw(screen)
-        pygame.draw.rect(screen, "blue", bullet.rect, 2)
+        
+        if config.dev_mode == True:
+            pygame.draw.rect(screen, "red", bullet.rect, 2)
 
     #objects draw
     obstacle.draw(screen)
     player.draw(screen)
 
     #hitboxes draw
-    pygame.draw.rect(screen, "blue", player.rect, 2)  # draw the player's rect for debugging purposes
-    pygame.draw.rect(screen, "blue", obstacle.rect, 2)
+    if config.dev_mode == True:
+        #surfaces
+        pygame.draw.rect(screen, "blue", player.rect, 2)  # draw the player's rect for debugging purposes
+        
+        #hitboxes
+        pygame.draw.rect(screen, "red", player.hitbox, 2)
+        pygame.draw.rect(screen, "red", obstacle.rect, 2)
+
     # RENDER YOUR GAME HERE -> ends
 
     # flip() the display to put your work on screen
