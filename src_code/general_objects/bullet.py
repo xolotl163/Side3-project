@@ -6,7 +6,7 @@ import utils
 
 class Bullet:
     #cconstructor
-    def __init__(self, mov_speed: float, x: float, y: float, width: float, height: float, direction: tuple, appeareance = None ):
+    def __init__(self, mov_speed: float, x: float, y: float, width: float, height: float, direction: float, appeareance = None ):
         self.x = x
         self.y = y
         self.width = width

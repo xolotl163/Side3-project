@@ -20,9 +20,10 @@ obstacle_width = 200
 obstacle_height = 75
 
 #in-game constants
-max_shooted_bullets = 10
+max_shooted_bullets = 20
 
 #in-game variables
+dev_mode = True #used to show hitboxes in screen and others information, remember that hitboxes are shown in red and surfaces are shown in blue
 
 #dictionaries, lists and other data structures that are important for the game
 
