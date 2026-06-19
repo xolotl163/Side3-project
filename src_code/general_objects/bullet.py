@@ -3,10 +3,12 @@ import config
 import pygame
 import math
 import utils
+from utils.observer import Subject
 
-class Bullet:
+class Bullet(Subject):
     #cconstructor
     def __init__(self, mov_speed: float, x: float, y: float, width: float, height: float, direction: float, appeareance = None ):
+        super().__init__()
         self.x = x
         self.y = y
         self.width = width
@@ -17,6 +19,8 @@ class Bullet:
         self.original_appeareance = self.appeareance
         self.rotation = direction
         self.mov_speed = mov_speed
+        self.damage_inflicted = 1
+        self.has_impacted = False
         self.is_active = True #used to libberate memory during execution
 
         """ just for debug
@@ -66,3 +70,29 @@ class Bullet:
         self.rect.x = self.x
         self.rect.y = self.y
         self.check_is_active()
+
+    def check_collisions(self, objects_to_check: list):
+        if not self.is_active:
+            return False
+        
+        for object in objects_to_check:
+            if not hasattr(object, 'rect'):
+                continue
+            
+            if self.has_impacted == False:
+                if self.rect.colliderect(object.rect):
+                    self.has_impacted = True
+                    self.on_notify(
+                        "bullet_impact",
+                        {
+                            "bullet": self,
+                            "target": object,
+                            "position": self.rect.center,
+                            "damage_inflicted": self.damage_inflicted
+                        }
+                    )
+                    self.is_active = False
+                    #print(f"[Bullet] ¡Impacto notificado a {self.observers} observadores!")
+            return True
+        
+        return False
