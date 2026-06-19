@@ -17,8 +17,9 @@ running = True
 #general objets and values to the excecution
 player = character.Player(config.window_width // 2, (config.window_height // 2)+150, config.player_width, config.player_height, config.player_image)
 obstacle = obstacle.Obstacle(config.window_width // 2, config.window_height // 2,config.obstacle_width,config.obstacle_height,config.obstacle_image)
-bullets = []  
+player_bullets = []  
 obstacles = [] #this list is used more than 1 obstacles are needed
+obstacles.append(obstacle)
 
 while running:
     
@@ -53,27 +54,41 @@ while running:
             player.rotate(pygame.mouse.get_pos(), delta_time)  # rotate the player to look at the mouse cursor
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
-                if len(bullets) < config.max_shooted_bullets:
-                    player.shoot(bullets)
+                if len(player_bullets) < config.max_shooted_bullets:
+                    player.shoot(player_bullets)
+                    player_bullets[-1].add_observer(obstacle)
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill(config.background_color)   
 
     #for the bullets
-    for bullet in bullets:
+    for bullet in player_bullets:
         bullet.reposition(bullet.direction, delta_time)
-    bullets = [b for b in bullets if b.is_active]
+        if bullet.is_active == True:
+            bullet.check_collisions(obstacles)
+    
+    #for the obstacles
+    for obst in obstacles:
+        obst.check_is_active()
+
+    #instances are liberated 
+    player_bullets = [b for b in player_bullets if b.is_active]
+    obstacles = [b for b in obstacles if b.is_active]
     """ logic of the game - ends """
 
     # RENDER YOUR GAME HERE -> starts
-    for bullet in bullets:
+    for bullet in player_bullets:
         bullet.draw(screen)
         
         if config.dev_mode == True:
             pygame.draw.rect(screen, "red", bullet.rect, 2)
 
+    for obst in obstacles:
+        obst.draw(screen)
+        if config.dev_mode == True:
+            pygame.draw.rect(screen, "red", obstacle.rect, 2)
+
     #objects draw
-    obstacle.draw(screen)
     player.draw(screen)
 
     #hitboxes draw
@@ -83,7 +98,6 @@ while running:
         
         #hitboxes
         pygame.draw.rect(screen, "red", player.hitbox, 2)
-        pygame.draw.rect(screen, "red", obstacle.rect, 2)
 
     # RENDER YOUR GAME HERE -> ends
 
