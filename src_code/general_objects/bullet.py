@@ -77,6 +77,12 @@ class Bullet(Subject):
         
         for object in objects_to_check:
             if not hasattr(object, 'rect'):
+                """
+                remeber: object bullets has only its rect, that actsas the hitbox at the same time, in the case of the player or enemy object
+                the if sentence has to check for the object directly called as hitboxm due tot he fact that these kinfd of objects have the surface
+                to its corresponding "texture" or image and the hitbox itself.
+                These rules apply int the same way to the obstacle object
+                """
                 continue
             
             if self.has_impacted == False:

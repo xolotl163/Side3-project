@@ -8,6 +8,8 @@ import characters.character as character
 import general_objects.bullet as bullet
 import general_objects.obstacle as obstacle
 
+import characters.enemy_ai as EAI
+
 # pygame setup - start
 screen = pygame.display.set_mode((config.window_width, config.window_height), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
@@ -16,7 +18,12 @@ running = True
 
 #general objets and values to the excecution
 player = character.Player(config.window_width // 2, (config.window_height // 2)+150, config.player_width, config.player_height, config.player_image)
+enemy = character.Enemy(100, config.window_width // 2, (config.window_height // 2)-150, config.player_width, config.player_height, config.enemy_image)
 obstacle = obstacle.Obstacle(config.window_width // 2, config.window_height // 2,config.obstacle_width,config.obstacle_height,config.obstacle_image)
+
+#inicialization of the enemies
+enemy.brain = EAI.enemy_brain
+
 player_bullets = []  
 obstacles = [] #this list is used more than 1 obstacles are needed
 obstacles.append(obstacle)
@@ -36,7 +43,7 @@ while running:
     """ Logic of the game -> starts """
     #player logic
     player.move(keys,delta_time)  # move the player based on the keys that are currently pressed
-   # player.rotate(pygame.mouse.get_pos(), delta_time)  # rotate the player to look at the mouse cursor
+    enemy.update(player, delta_time)
     
       #global events
     for event in events:
@@ -79,23 +86,23 @@ while running:
     # RENDER YOUR GAME HERE -> starts
     for bullet in player_bullets:
         bullet.draw(screen)
-        
         if config.dev_mode == True:
-            pygame.draw.rect(screen, "red", bullet.rect, 2)
+            pygame.draw.rect(screen, "red", bullet.rect, 4)
 
     for obst in obstacles:
         obst.draw(screen)
         if config.dev_mode == True:
-            pygame.draw.rect(screen, "red", obstacle.rect, 2)
+            pygame.draw.rect(screen, "red", obstacle.rect, 4)
 
     #objects draw
     player.draw(screen)
+    enemy.draw(screen)
 
     #hitboxes draw
     if config.dev_mode == True:
         #surfaces
         pygame.draw.rect(screen, "blue", player.rect, 2)  # draw the player's rect for debugging purposes
-        
+        pygame.draw.rect(screen, "blue", enemy.rect, 2)
         #hitboxes
         pygame.draw.rect(screen, "red", player.hitbox, 2)
 
