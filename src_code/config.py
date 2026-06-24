@@ -10,6 +10,7 @@ const_limit_escenary = 25
 
 #objects and instances constants
 player_image = "src_code/resources/placeholders/player_placeholder.png"
+enemy_image = "src_code/resources/placeholders/enemy_placeholder.png"
 bullet_image = "src_code/resources/placeholders/bullet_placeholder.png"
 obstacle_image = "src_code/resources/placeholders/obstacle_placeholder.png"
 player_width = 50

@@ -139,3 +139,32 @@ class Player(Character):
         )
 
         bullet_list.append(new_bullet)
+
+class Enemy(Character):
+    def __init__(self, speed, x, y, width, height, appeareance):
+        super().__init__(x, y, width, height, appeareance)
+        #self.hitbox = 
+        self.speed = speed
+        self.brain = None #The barin or action planner is added later, in the main archive
+    
+    def move_towards(self, target_x, target_y, delta_time):
+        #first the angle between the player and the enemy are calculated
+        #thus we cna obtain informacion such as the forward vector of the enemy
+        #and the direction of its shooting
+        dx = target_x - self.rect.center[0]
+        dy = target_y - self.rect.center[1]
+        angle = math.atan2(dy, dx) #returns it in radians
+
+        #the object is moved every frame using the obtnaied data
+        self.x += math.cos(angle) * self.speed * delta_time
+        self.y += math.sin(angle) * self.speed * delta_time
+
+        #rect values are updated
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+    def update(self, player, delta_time):
+        if self.brain:
+            self.brain.process(self, player, delta_time)
+        else:
+            print(f"The enemy object {self} does not have a Behavioral Tree (BHT))")
